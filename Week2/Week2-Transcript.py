@@ -5,32 +5,11 @@ __author__ = 'somnathbanerjee'
 
 import pymongo
 import sys
-import urllib2
-import json
-
-
 
 connection = pymongo.Connection("mongodb://localhost", safe=True)
 
-#db = connection.somnathdb
-#scores = db.scores
-
-db = connection.reddit
-stories =db.stories
-
-
-reddit_page = urllib2.urlopen("http://www.reddit.com/r/technology/.json")
-
-# parse the json into python objects
-parsed = json.loads(reddit_page.read())
-
-# iterate through every news item on the page
-for item in parsed['data']['children']:
-    # put it in mongo
-    stories.insert(item['data'])
-
-
-
+db = connection.students
+grades = db.grades
 
 def find():
 	print "Finding 10"
@@ -38,7 +17,7 @@ def find():
 	selector = {'student' : 1,  'score' : 1,  '_id'  : 0}
 
 	try:
-		cur = scores.find(query, selector)
+		cur = grades.find(query, selector)
 	except:
 		print "Unexpected error:",  sys.exc_info()[0]
 
@@ -50,17 +29,18 @@ def find():
 			break
 
 
-
-
 def find_one():
 	print "Call of Duty"
-	query = {'student' : 11}
+	query = {'student_id' : 11}
 
 	try:
-		doc = scores.find_one(query)
+		doc = grades.find_one(query)
 	except:
 		print "Unexpected error:",  sys.exc_info()[0]
 
 	print doc
 
-#find()
+
+find()
+#find_one()
+
